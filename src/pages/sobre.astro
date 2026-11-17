@@ -1,0 +1,39 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site';
+const services = [
+  { t: 'Edição', d: 'Lançamentos físicos e digitais, distribuição e acompanhamento de cada disco.' },
+  { t: 'PR & Comunicação', d: 'Imprensa, rádio e campanhas de lançamento.' },
+  { t: 'Booking', d: 'Concertos e digressões para os artistas da casa.' },
+];
+---
+<Base title="Sobre" description={site.description}>
+  <div class="about">
+    <div>
+      <p class="eyebrow">Record label · Music PR · Booking</p>
+      <h1>{site.tagline}.</h1>
+      <div class="prose">{site.about.map((p) => <p>{p}</p>)}</div>
+    </div>
+    <aside>
+      <h2 class="eyebrow">Contactos</h2>
+      <ul class="contacts">
+        {site.contacts.map((c) => (
+          <li><strong>{c.name}</strong><span class="muted small">{c.role}</span><a href={`mailto:${c.email}`}>{c.email}</a></li>
+        ))}
+      </ul>
+    </aside>
+  </div>
+
+  <section class="section">
+    <div class="section-head"><h2>O que fazemos</h2></div>
+    <div class="services">{services.map((s) => <div><h3>{s.t}</h3><p class="muted">{s.d}</p></div>)}</div>
+  </section>
+</Base>
+<style>
+  .about { display: grid; grid-template-columns: 1.5fr 1fr; gap: 2.5rem; margin-bottom: 3rem; }
+  .contacts { list-style: none; padding: 0; margin: 0; }
+  .contacts li { display: flex; flex-direction: column; padding: .75rem 0; border-bottom: 1px solid var(--line); }
+  .services { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; }
+  .services h3 { border-top: 3px solid var(--red); padding-top: .6rem; }
+  @media (max-width: 760px) { .about { grid-template-columns: 1fr; } }
+</style>

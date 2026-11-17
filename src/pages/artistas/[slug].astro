@@ -1,0 +1,55 @@
+---
+import { Image } from 'astro:assets';
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import ReleaseCard from '../../components/ReleaseCard.astro';
+import EventList from '../../components/EventList.astro';
+import { getArtists, getReleases, getEvents, type Artist } from '../../lib/data';
+
+export async function getStaticPaths() {
+  const artists = await getArtists();
+  return artists.map((a) => ({ params: { slug: a.id }, props: { artist: a } }));
+}
+const { artist } = Astro.props as { artist: Artist };
+const { Content } = await render(artist);
+const has = (refs: { id: string }[]) => refs.some((r) => r.id === artist.id);
+const releases = (await getReleases()).filter((r) => has(r.data.artists));
+const { upcoming, past } = await getEvents();
+const events = { upcoming: upcoming.filter((e) => has(e.data.artists)), past: past.filter((e) => has(e.data.artists)) };
+const links = Object.entries(artist.data.links ?? {}).filter(([, v]) => v);
+const hasBio = Boolean(artist.body?.trim());
+---
+<Base title={artist.data.name} description={`${artist.data.name} na Biruta Records.`}>
+  <header class="head">
+    {artist.data.photo && <Image src={artist.data.photo} alt={artist.data.name} width={600} />}
+    <div>
+      <p class="eyebrow">{artist.data.roster ? 'Roster' : 'Arquivo'}</p>
+      <h1>{artist.data.name}</h1>
+      {hasBio ? <div class="prose"><Content /></div> : <p class="muted">Biografia por preencher.</p>}
+      {links.length > 0 && (
+        <p class="links">{links.map(([k, v]) => <a href={v} rel="noopener">{k[0].toUpperCase() + k.slice(1)} ↗</a>)}</p>
+      )}
+    </div>
+  </header>
+
+  {releases.length > 0 && (
+    <section class="section">
+      <div class="section-head"><h2>Discografia na Biruta</h2></div>
+      <div class="grid">{releases.map((r) => <ReleaseCard release={r} />)}</div>
+    </section>
+  )}
+
+  {events.upcoming.length > 0 && (
+    <section class="section"><div class="section-head"><h2>Próximos concertos</h2></div><EventList events={events.upcoming} /></section>
+  )}
+  {events.past.length > 0 && (
+    <section class="section"><div class="section-head"><h2>Concertos anteriores</h2></div><EventList events={events.past} showYear /></section>
+  )}
+</Base>
+
+<style>
+  .head { display: grid; grid-template-columns: auto 1fr; gap: 2rem; margin-bottom: 2.5rem; }
+  .head img { width: min(320px, 100%); }
+  .links { display: flex; gap: 1rem; flex-wrap: wrap; }
+  @media (max-width: 700px) { .head { grid-template-columns: 1fr; } }
+</style>

@@ -1,0 +1,24 @@
+---
+import { Image } from 'astro:assets';
+import type { Release } from '../lib/data';
+import { year } from '../lib/data';
+interface Props { release: Release; eager?: boolean }
+const { release, eager = false } = Astro.props;
+const { title, artist_line, cover, format, date } = release.data;
+---
+<article class="card" data-format={format}>
+  <a href={`/lancamentos/${release.id}`}>
+    <Image src={cover} alt={`Capa de ${title}, de ${artist_line}`} width={400} height={400} loading={eager ? 'eager' : 'lazy'} />
+    <h3>{title}</h3>
+  </a>
+  <p class="meta">{artist_line}<br /><span>{format} · {year(date)}</span></p>
+</article>
+
+<style>
+  .card a { color: var(--ink); }
+  .card img { aspect-ratio: 1; object-fit: cover; width: 100%; background: var(--line); transition: opacity .15s; }
+  .card a:hover img { opacity: .85; }
+  .card h3 { font-size: .95rem; margin: .6rem 0 .1rem; }
+  .meta { font-size: .875rem; color: var(--muted); margin: 0; line-height: 1.35; }
+  .meta span { font-size: .8rem; }
+</style>

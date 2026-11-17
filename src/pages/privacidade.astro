@@ -1,0 +1,29 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site';
+// ⚠ RASCUNHO — rever juridicamente antes de publicar. Completar entidade, NIF e morada.
+---
+<Base title="Política de privacidade" newsletter={false}>
+  <div class="prose">
+    <h1>Política de privacidade</h1>
+    <p class="muted small">Última atualização: [data]</p>
+
+    <h2>Responsável pelo tratamento</h2>
+    <p>[Nome da entidade que explora a Biruta Records], NIF [·], [morada]. Contacto: <a href={`mailto:${site.contacts[1].email}`}>{site.contacts[1].email}</a>.</p>
+
+    <h2>Que dados recolhemos</h2>
+    <p>Apenas o endereço de email que nos dás ao subscrever a newsletter. Este site não usa cookies de análise nem de publicidade. Os leitores do Bandcamp incorporados nas páginas de lançamentos são fornecidos pelo Bandcamp e regem-se pela política de privacidade deste.</p>
+
+    <h2>Para que os usamos</h2>
+    <p>Para enviar a newsletter da Biruta Records (lançamentos, concertos e novidades), com base no teu consentimento (art. 6.º, n.º 1, alínea a) do RGPD). Podes retirá-lo a qualquer momento através da ligação de cancelamento presente em cada email.</p>
+
+    <h2>Subcontratantes</h2>
+    <p>A lista de subscritores é gerida no Mailchimp (Intuit Inc., EUA). A transferência de dados para os EUA está abrangida pelo EU-US Data Privacy Framework e/ou por cláusulas contratuais-tipo.</p>
+
+    <h2>Durante quanto tempo</h2>
+    <p>Enquanto mantiveres a subscrição. Ao cancelares, o teu email é removido da lista ativa.</p>
+
+    <h2>Os teus direitos</h2>
+    <p>Tens direito de acesso, retificação, apagamento, limitação, portabilidade e oposição. Para os exercer, escreve-nos para o contacto acima. Podes também apresentar reclamação à Comissão Nacional de Proteção de Dados (<a href="https://www.cnpd.pt">cnpd.pt</a>).</p>
+  </div>
+</Base>

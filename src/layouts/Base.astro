@@ -1,0 +1,94 @@
+---
+import '../styles/global.css';
+import { Image, getImage } from 'astro:assets';
+import logo from '../assets/brand/logo.png';
+import bg from '../assets/brand/bg.jpg';
+import Newsletter from '../components/Newsletter.astro';
+import { site } from '../data/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  newsletter?: boolean;
+}
+const { title, description = site.description, image, newsletter = true } = Astro.props;
+const fullTitle = title ? `${title} — ${site.name}` : `${site.name} — ${site.tagline}`;
+const bgImg = await getImage({ src: bg, width: 1600, format: 'webp' });
+const ogImage = image ?? (await getImage({ src: logo, format: 'png' })).src;
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+
+const nav = [
+  { href: '/lancamentos', label: 'Lançamentos' },
+  { href: '/artistas', label: 'Artistas' },
+  { href: '/agenda', label: 'Agenda' },
+  { href: '/cartazes', label: 'Cartazes' },
+  { href: '/sobre', label: 'Sobre' },
+];
+---
+<!doctype html>
+<html lang="pt-PT">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={new URL(ogImage, Astro.site)} />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+  <body style={`--bg-photo: url(${bgImg.src})`}>
+    <div class="page">
+      <a class="visually-hidden" href="#conteudo">Saltar para o conteúdo</a>
+      <header class="site-header">
+        <a href="/" class="logo" aria-label={`${site.name} — início`}>
+          <Image src={logo} alt={site.name} width={260} loading="eager" />
+        </a>
+      </header>
+      <nav class="navbar" aria-label="Principal">
+        <ul>
+          {nav.map((n) => (
+            <li><a href={n.href} aria-current={path.startsWith(n.href) ? 'page' : undefined}>{n.label}</a></li>
+          ))}
+          <li><a href={site.store} rel="noopener">Loja ↗</a></li>
+        </ul>
+      </nav>
+      <main id="conteudo" class="main">
+        <slot />
+        {newsletter && <Newsletter />}
+      </main>
+      <footer class="site-footer">
+        <div>
+          <strong>{site.name}</strong><br />
+          <span class="muted">{site.location} · est. {site.founded}</span>
+        </div>
+        <ul class="social">
+          {site.social.map((s) => <li><a href={s.url} rel="noopener">{s.label}</a></li>)}
+        </ul>
+        <div class="small muted">
+          <a href="/privacidade">Privacidade</a> · © {new Date().getFullYear()} {site.name}
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>
+
+<style>
+  .site-header { background: var(--header); display: flex; justify-content: center; padding: 1.75rem 1rem 1.25rem; }
+  .logo img { width: clamp(160px, 28vw, 260px); }
+  .navbar { background: var(--line); position: sticky; top: 0; z-index: 10; }
+  .navbar ul { list-style: none; margin: 0; padding: 0 clamp(.5rem, 2vw, 1.5rem); display: flex; gap: .25rem 1.25rem; overflow-x: auto; scrollbar-width: none; }
+  .navbar a { display: block; padding: .75rem .25rem .6rem; font-weight: 700; font-size: .85rem; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); border-bottom: 3px solid transparent; white-space: nowrap; }
+  .navbar a:hover { color: var(--ink); text-decoration: none; border-color: var(--muted); }
+  .navbar a[aria-current='page'] { color: var(--ink); border-color: var(--ink); }
+  .site-footer { display: grid; gap: 1rem; grid-template-columns: 1fr auto; align-items: start; padding: 1.5rem clamp(1rem, 3vw, 2rem); border-top: 1px solid var(--line); font-size: .9rem; }
+  .site-footer .small { grid-column: 1 / -1; }
+  .social { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .25rem 1rem; }
+  @media (max-width: 600px) { .site-footer { grid-template-columns: 1fr; } }
+</style>

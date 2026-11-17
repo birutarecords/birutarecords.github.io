@@ -1,0 +1,139 @@
+# Configuração do Pages CMS (https://pagescms.org) — login com GitHub, edita os ficheiros deste repositório.
+media:
+  - name: covers
+    label: Capas
+    input: src/assets/covers
+    output: ../../assets/covers
+    extensions: [jpg, jpeg, png, webp]
+  - name: posters
+    label: Cartazes
+    input: src/assets/posters
+    output: ../../assets/posters
+    extensions: [jpg, jpeg, png, webp]
+  - name: artists
+    label: Fotos de artistas
+    input: src/assets/artists
+    output: ../../assets/artists
+    extensions: [jpg, jpeg, png, webp]
+
+content:
+  - name: events
+    label: Agenda / Cartazes
+    type: collection
+    path: src/content/events
+    filename: '{fields.date}-{primary}.md'
+    view:
+      fields: [title, date, venue]
+      sort: [date]
+      default: { sort: date, order: desc }
+    fields:
+      - { name: title, label: Título, type: string, required: true }
+      - { name: date, label: Data, type: date, required: true }
+      - { name: time, label: Hora, type: string, description: 'ex.: 21h30' }
+      - { name: venue, label: Sala, type: string, required: true }
+      - { name: city, label: Cidade, type: string, default: Porto }
+      - name: artists
+        label: Artistas (identificador)
+        description: 'Nome do ficheiro do artista sem .md (ex.: rica, ze-menos, redoma).'
+        type: string
+        list: true
+      - { name: tickets, label: Link para bilhetes, type: string }
+      - { name: poster, label: Cartaz, type: image, options: { media: posters } }
+      - { name: draft, label: Rascunho (não publicar), type: boolean, default: false }
+      - { name: body, label: Descrição, type: rich-text }
+
+  - name: releases
+    label: Lançamentos
+    type: collection
+    path: src/content/releases
+    filename: '{primary}.md'
+    view:
+      fields: [title, artist_line, date, catalog]
+      default: { sort: date, order: desc }
+    fields:
+      - { name: title, label: Título, type: string, required: true }
+      - name: artists
+        label: Artistas (identificador)
+        description: 'Nome do ficheiro do artista sem .md (ex.: malaboos).'
+        type: string
+        list: true
+        required: true
+      - { name: artist_line, label: Artista(s) como aparece na capa, type: string, required: true }
+      - { name: date, label: Data de edição, type: date, required: true }
+      - name: format
+        label: Formato
+        type: select
+        options: { values: [Single, EP, Álbum, Ao vivo, Compilação] }
+      - { name: catalog, label: N.º de catálogo, type: string, description: 'ex.: BR040' }
+      - { name: cover, label: Capa, type: image, required: true, options: { media: covers } }
+      - { name: bandcamp_url, label: URL no Bandcamp, type: string }
+      - { name: bandcamp_id, label: ID do Bandcamp (para o leitor), type: number, description: 'Em Bandcamp → Share/Embed, o número em album=… ou track=…' }
+      - name: bandcamp_type
+        label: Tipo no Bandcamp
+        type: select
+        options: { values: [album, track] }
+      - name: tracks
+        label: Alinhamento
+        type: object
+        list: true
+        fields:
+          - { name: title, label: Faixa, type: string }
+          - { name: duration, label: Duração, type: string }
+      - { name: credits, label: Créditos, type: text }
+      - { name: draft, label: Rascunho (não publicar), type: boolean, default: false }
+      - { name: body, label: Texto, type: rich-text }
+
+  - name: artists
+    label: Artistas
+    type: collection
+    path: src/content/artists
+    filename: '{primary}.md'
+    view:
+      fields: [name, roster]
+    fields:
+      - { name: name, label: Nome, type: string, required: true }
+      - { name: roster, label: Roster atual, type: boolean, default: true }
+      - { name: photo, label: Fotografia, type: image, options: { media: artists } }
+      - name: links
+        label: Links
+        type: object
+        fields:
+          - { name: instagram, label: Instagram, type: string }
+          - { name: spotify, label: Spotify, type: string }
+          - { name: website, label: Website, type: string }
+      - { name: body, label: Biografia, type: rich-text }
+
+  - name: settings
+    label: Definições do site
+    type: file
+    path: src/data/site.json
+    format: json
+    fields:
+      - { name: name, label: Nome, type: string }
+      - { name: tagline, label: Assinatura, type: string }
+      - { name: description, label: Descrição (SEO), type: text }
+      - { name: location, label: Localização, type: string }
+      - { name: founded, label: Ano de fundação, type: number }
+      - { name: about, label: Texto "Sobre" (parágrafos), type: text, list: true }
+      - name: contacts
+        label: Contactos
+        type: object
+        list: true
+        fields:
+          - { name: name, label: Nome, type: string }
+          - { name: role, label: Função, type: string }
+          - { name: email, label: Email, type: string }
+      - name: social
+        label: Redes
+        type: object
+        list: true
+        fields:
+          - { name: label, label: Nome, type: string }
+          - { name: url, label: URL, type: string }
+      - { name: store, label: Link da loja, type: string }
+      - name: mailchimp
+        label: Mailchimp
+        type: object
+        fields:
+          - { name: action, label: URL do formulário (action), type: string }
+          - { name: honeypot, label: Campo honeypot (b_…), type: string }

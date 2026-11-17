@@ -1,0 +1,74 @@
+/* Identidade baseada no Bandcamp da Biruta (birutarecords.bandcamp.com) */
+:root {
+  --paper: #f8f8f6;      /* fundo do conteúdo */
+  --ink: #0d0f11;        /* texto principal */
+  --muted: #595c5f;      /* links / texto secundário */
+  --line: #e0e0db;       /* barra de navegação, divisórias */
+  --header: #f2f2f2;     /* fundo do cabeçalho com o logótipo */
+  --red: #d50707;        /* vermelho Biruta (acento) */
+  --red-dark: #bf5050;
+  --font: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --wrap: 1040px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--ink);
+  background-color: var(--red);
+  background-image: var(--bg-photo);
+  background-size: cover;
+  background-position: center top;
+  background-attachment: fixed;
+}
+img { max-width: 100%; height: auto; display: block; }
+a { color: var(--muted); text-decoration: none; }
+a:hover { color: var(--ink); text-decoration: underline; }
+h1, h2, h3 { line-height: 1.15; margin: 0 0 0.5em; letter-spacing: -0.01em; }
+h1 { font-size: clamp(1.8rem, 4vw, 2.6rem); }
+h2 { font-size: 1.35rem; }
+h3 { font-size: 1rem; }
+p { margin: 0 0 1em; }
+:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+
+.page { max-width: var(--wrap); margin: 0 auto; background: var(--paper); min-height: 100vh; box-shadow: 0 0 40px rgba(0,0,0,.25); }
+.main { padding: 2rem clamp(1rem, 3vw, 2rem) 3rem; }
+
+.section { margin: 0 0 3rem; }
+.section-head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; border-bottom: 1px solid var(--line); margin-bottom: 1.25rem; padding-bottom: .4rem; }
+.section-head h2 { margin: 0; font-size: 1rem; text-transform: uppercase; letter-spacing: .06em; }
+.section-head a { font-size: .9rem; }
+
+.eyebrow { font-size: .8rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+.muted { color: var(--muted); }
+.small { font-size: .875rem; }
+.prose { max-width: 62ch; white-space: normal; }
+.prose p { margin-bottom: 1em; }
+.pre-line { white-space: pre-line; }
+
+.grid { display: grid; gap: 1.5rem 1.25rem; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); }
+@media (max-width: 600px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem .9rem; } }
+/* iOS ignora background-attachment: fixed */
+@media (hover: none) { body { background-attachment: scroll; background-size: 100% auto; background-repeat: repeat-y; } }
+
+.btn {
+  display: inline-flex; align-items: center; gap: .4em;
+  font: inherit; font-weight: 700; font-size: .9rem;
+  padding: .6em 1.1em; border: 2px solid var(--ink); background: var(--ink); color: var(--paper);
+  cursor: pointer; text-decoration: none;
+}
+.btn:hover { background: var(--red); border-color: var(--red); color: #fff; text-decoration: none; }
+.btn.ghost { background: transparent; color: var(--ink); }
+.btn.ghost:hover { background: var(--ink); color: var(--paper); }
+
+.chips { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: 1.5rem; }
+.chip { font: inherit; font-size: .85rem; padding: .3em .8em; border: 1px solid var(--muted); background: transparent; color: var(--muted); cursor: pointer; }
+.chip[aria-pressed='true'] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+.badge { display: inline-block; font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; padding: .15em .5em; background: var(--red); color: #fff; }
+
+.visually-hidden { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }

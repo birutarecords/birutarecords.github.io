@@ -1,0 +1,25 @@
+---
+import Base from '../layouts/Base.astro';
+import EventList from '../components/EventList.astro';
+import { getEvents, groupByYear } from '../lib/data';
+const { upcoming, past } = await getEvents();
+---
+<Base title="Agenda" description="Concertos dos artistas da Biruta Records.">
+  <h1>Agenda</h1>
+  <section class="section">
+    <div class="section-head"><h2>Próximos</h2></div>
+    {upcoming.length ? <EventList events={upcoming} /> : <p class="muted">Sem datas anunciadas de momento.</p>}
+  </section>
+  <section class="section">
+    <div class="section-head"><h2>Histórico</h2><a href="/cartazes">Ver cartazes →</a></div>
+    {groupByYear(past).map(([y, evs]) => (
+      <>
+        <h3 class="year">{y}</h3>
+        <EventList events={evs} />
+      </>
+    ))}
+  </section>
+</Base>
+<style>
+  .year { margin: 1.5rem 0 0; font-size: .85rem; color: var(--muted); letter-spacing: .06em; }
+</style>

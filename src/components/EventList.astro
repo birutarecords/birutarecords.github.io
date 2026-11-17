@@ -1,0 +1,37 @@
+---
+import type { Event } from '../lib/data';
+import { formatShort, year, resolveArtists } from '../lib/data';
+interface Props { events: Event[]; showYear?: boolean }
+const { events, showYear = false } = Astro.props;
+const rows = await Promise.all(events.map(async (e) => ({ e, artists: await resolveArtists(e.data.artists) })));
+---
+<ul class="events">
+  {rows.map(({ e, artists }) => (
+    <li>
+      <time datetime={e.data.date.toISOString().slice(0, 10)}>
+        <span class="d">{formatShort(e.data.date)}</span>
+        {showYear && <span class="y">{year(e.data.date)}</span>}
+      </time>
+      <div class="info">
+        <strong>{e.data.title}</strong>
+        <span class="muted">{e.data.venue}, {e.data.city}{e.data.time && ` · ${e.data.time}`}</span>
+        {artists.length > 0 && (
+          <span class="small">
+            {artists.map((a, i) => (<>{i > 0 && ', '}<a href={`/artistas/${a.id}`}>{a.data.name}</a></>))}
+          </span>
+        )}
+      </div>
+      {e.data.tickets && <a class="btn ghost" href={e.data.tickets} rel="noopener">Bilhetes</a>}
+    </li>
+  ))}
+</ul>
+
+<style>
+  .events { list-style: none; margin: 0; padding: 0; }
+  li { display: grid; grid-template-columns: 5.5rem 1fr auto; gap: 1rem; align-items: center; padding: .9rem 0; border-bottom: 1px solid var(--line); }
+  time { display: flex; flex-direction: column; font-weight: 700; text-transform: uppercase; line-height: 1.1; }
+  .d { font-size: 1.15rem; }
+  .y { font-size: .8rem; color: var(--muted); }
+  .info { display: flex; flex-direction: column; gap: .1rem; }
+  @media (max-width: 560px) { li { grid-template-columns: 4.5rem 1fr; } li .btn { grid-column: 2; justify-self: start; } }
+</style>

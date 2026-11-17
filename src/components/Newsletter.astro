@@ -1,0 +1,39 @@
+---
+import { site } from '../data/site';
+const { action, honeypot } = site.mailchimp;
+const ready = Boolean(action);
+---
+<section class="newsletter" id="newsletter" aria-labelledby="nl-title">
+  <div>
+    <h2 id="nl-title">Newsletter</h2>
+    <p>Lançamentos, concertos e coisas inquietantes. Pouco e bom, prometido.</p>
+  </div>
+  <form action={ready ? action : undefined} method="post" target="_blank" class="nl-form">
+    <label class="visually-hidden" for="mce-EMAIL">Email</label>
+    <input type="email" name="EMAIL" id="mce-EMAIL" placeholder="o.teu@email.com" required autocomplete="email" />
+    <button class="btn" type="submit" disabled={!ready}>Subscrever</button>
+    {honeypot && (
+      <div aria-hidden="true" style="position:absolute;left:-5000px"><input type="text" name={honeypot} tabindex="-1" value="" /></div>
+    )}
+    <label class="consent small">
+      <input type="checkbox" name="gdpr_consent" required />
+      <span>Aceito receber emails da Biruta Records. Posso cancelar a qualquer momento. <a href="/privacidade">Política de privacidade</a>.</span>
+    </label>
+    {!ready && <p class="small muted note">⚠ Formulário por ligar: falta o URL do Mailchimp em <code>src/data/site.json</code>.</p>}
+  </form>
+</section>
+
+<style>
+  .newsletter { display: grid; grid-template-columns: 1fr 1.3fr; gap: 1.5rem 2rem; align-items: start; margin-top: 3rem; padding: 1.75rem; background: var(--ink); color: var(--paper); }
+  .newsletter h2 { font-size: 1.5rem; }
+  .newsletter p { margin: 0; color: #c9c9c4; }
+  .nl-form { display: flex; flex-wrap: wrap; gap: .5rem; position: relative; }
+  input[type='email'] { flex: 1 1 220px; font: inherit; padding: .6em .8em; border: 2px solid var(--paper); background: var(--paper); color: var(--ink); }
+  .btn { background: var(--red); border-color: var(--red); color: #fff; }
+  .btn:hover { background: var(--paper); border-color: var(--paper); color: var(--ink); }
+  .btn:disabled { opacity: .5; cursor: not-allowed; }
+  .consent { display: flex; gap: .5rem; align-items: flex-start; flex-basis: 100%; color: #c9c9c4; }
+  .consent a, .note code { color: var(--paper); text-decoration: underline; }
+  .note { flex-basis: 100%; }
+  @media (max-width: 700px) { .newsletter { grid-template-columns: 1fr; } }
+</style>

@@ -1,0 +1,49 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import { getArtists, getReleases } from '../../lib/data';
+
+const artists = await getArtists();
+const releases = await getReleases();
+const info = (id: string) => {
+  const rs = releases.filter((r) => r.data.artists.some((a) => a.id === id));
+  return { count: rs.length, latest: rs[0] };
+};
+const roster = artists.filter((a) => a.data.roster);
+const archive = artists.filter((a) => !a.data.roster);
+---
+<Base title="Artistas" description="Artistas da Biruta Records.">
+  <h1>Artistas</h1>
+
+  <section class="section">
+    <div class="section-head"><h2>Roster</h2></div>
+    <div class="grid">
+      {roster.map((a) => {
+        const { latest, count } = info(a.id);
+        const img = a.data.photo || latest?.data.cover;
+        return (
+          <a class="artist" href={`/artistas/${a.id}`}>
+            {img && <Image src={img} alt="" width={400} height={400} />}
+            <strong>{a.data.name}</strong>
+            <span class="muted small">{count} {count === 1 ? 'lançamento' : 'lançamentos'}</span>
+          </a>
+        );
+      })}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head"><h2>Arquivo e colaborações</h2></div>
+    <ul class="archive">
+      {archive.map((a) => <li><a href={`/artistas/${a.id}`}>{a.data.name}</a> <span class="muted small">({info(a.id).count})</span></li>)}
+    </ul>
+  </section>
+</Base>
+
+<style>
+  .artist { display: flex; flex-direction: column; gap: .15rem; color: var(--ink); }
+  .artist img { aspect-ratio: 1; object-fit: cover; width: 100%; margin-bottom: .5rem; filter: grayscale(1); transition: filter .2s; }
+  .artist:hover img { filter: none; }
+  .archive { list-style: none; padding: 0; margin: 0; columns: 3 12rem; }
+  .archive li { padding: .25rem 0; }
+</style>

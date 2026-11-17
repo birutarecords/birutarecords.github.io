@@ -1,0 +1,17 @@
+---
+interface Props { id?: number; type?: 'album' | 'track'; url: string; title: string; tracks: number }
+const { id, type = 'album', url, title, tracks } = Astro.props;
+const height = type === 'track' ? 120 : Math.min(120 + 33 * tracks + 40, 470);
+const src = id
+  ? `https://bandcamp.com/EmbeddedPlayer/${type}=${id}/size=large/bgcol=f8f8f6/linkcol=595c5f/artwork=none/tracklist=${type === 'album'}/transparent=true/`
+  : null;
+---
+{src && (
+  <iframe
+    title={`Ouvir ${title} no Bandcamp`}
+    style={`border:0;width:100%;height:${height}px`}
+    src={src}
+    loading="lazy"
+    seamless
+  ><a href={url}>{title}</a></iframe>
+)}

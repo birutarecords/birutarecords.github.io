@@ -1,0 +1,41 @@
+---
+import Base from '../../layouts/Base.astro';
+import ReleaseCard from '../../components/ReleaseCard.astro';
+import { getReleases, groupByYear } from '../../lib/data';
+
+const releases = await getReleases();
+const formats = [...new Set(releases.map((r) => r.data.format))];
+const years = groupByYear(releases);
+---
+<Base title="Lançamentos" description="Catálogo completo da Biruta Records.">
+  <h1>Lançamentos</h1>
+  <p class="muted">{releases.length} edições desde {years.at(-1)?.[0]}. Ouve e compra no Bandcamp.</p>
+
+  <div class="chips" role="group" aria-label="Filtrar por formato">
+    <button class="chip" type="button" data-filter="all" aria-pressed="true">Tudo</button>
+    {formats.map((f) => <button class="chip" type="button" data-filter={f} aria-pressed="false">{f}</button>)}
+  </div>
+
+  {years.map(([y, items]) => (
+    <section class="section year" data-year={y}>
+      <div class="section-head"><h2>{y}</h2></div>
+      <div class="grid">{items.map((r) => <ReleaseCard release={r} />)}</div>
+    </section>
+  ))}
+</Base>
+
+<script>
+  const chips = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+  chips.forEach((chip) =>
+    chip.addEventListener('click', () => {
+      const f = chip.dataset.filter!;
+      chips.forEach((c) => c.setAttribute('aria-pressed', String(c === chip)));
+      document.querySelectorAll<HTMLElement>('.card').forEach((card) => {
+        card.hidden = f !== 'all' && card.dataset.format !== f;
+      });
+      document.querySelectorAll<HTMLElement>('.year').forEach((sec) => {
+        sec.hidden = !sec.querySelector('.card:not([hidden])');
+      });
+    }),
+  );
+</script>

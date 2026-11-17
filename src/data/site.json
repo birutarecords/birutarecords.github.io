@@ -1,0 +1,55 @@
+{
+  "name": "Biruta Records",
+  "tagline": "Inquietante e Independente",
+  "description": "Biruta Records — editora discográfica independente, agência de PR e booking. Porto, desde 2014.",
+  "location": "Porto, Portugal",
+  "founded": 2014,
+  "about": [
+    "A Biruta Records é uma editora discográfica independente do Porto, fundada em 2014. Edita em formato físico e digital, e trabalha também como agência de PR e booking para os seus artistas.",
+    "Do hip-hop dos Ollgoody’s, a primeira edição, ao art rock dos Malaboos e ao spoken word dos Melífluo, o catálogo é inquietante e independente — como o nome diz."
+  ],
+  "contacts": [
+    {
+      "role": "Creative Director / Booking",
+      "name": "Diana Queirós",
+      "email": "dianaqueiros@birutamusic.com"
+    },
+    {
+      "role": "Management / PR / Booking",
+      "name": "Rui Correia",
+      "email": "ruicorreia@birutamusic.com"
+    },
+    {
+      "role": "Booking",
+      "name": "Eduardo Pacheco",
+      "email": "eduardopacheco@birutamusic.com"
+    }
+  ],
+  "social": [
+    {
+      "label": "Bandcamp",
+      "url": "https://birutarecords.bandcamp.com/"
+    },
+    {
+      "label": "Instagram",
+      "url": "https://instagram.com/birutamusic"
+    },
+    {
+      "label": "YouTube",
+      "url": "https://www.youtube.com/user/birutarecords"
+    },
+    {
+      "label": "Facebook",
+      "url": "https://www.facebook.com/birutamusica"
+    },
+    {
+      "label": "Linktree",
+      "url": "https://linktr.ee/biruta_booking"
+    }
+  ],
+  "store": "https://birutarecords.bandcamp.com/merch",
+  "mailchimp": {
+    "action": "",
+    "honeypot": ""
+  }
+}

@@ -1,0 +1,39 @@
+---
+import Base from '../layouts/Base.astro';
+import ReleaseCard from '../components/ReleaseCard.astro';
+import EventList from '../components/EventList.astro';
+import { getReleases, getEvents } from '../lib/data';
+import { site } from '../data/site';
+
+const releases = await getReleases();
+const { upcoming, past } = await getEvents();
+const latest = releases.slice(0, 8);
+---
+<Base>
+  <section class="intro section">
+    <p class="eyebrow">Record label · Music PR · Booking — {site.location}, est. {site.founded}</p>
+    <h1>{site.tagline}.</h1>
+  </section>
+
+  <section class="section">
+    <div class="section-head"><h2>Lançamentos recentes</h2><a href="/lancamentos">Catálogo completo ({releases.length}) →</a></div>
+    <div class="grid">
+      {latest.map((r, i) => <ReleaseCard release={r} eager={i < 4} />)}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head"><h2>Próximos concertos</h2><a href="/agenda">Agenda →</a></div>
+    {upcoming.length > 0
+      ? <EventList events={upcoming.slice(0, 5)} />
+      : (
+        <p class="muted">Sem datas anunciadas de momento. Segue a <a href="https://instagram.com/birutamusic">@birutamusic</a> ou subscreve a newsletter.
+          {past[0] && <> Último concerto: <a href="/agenda">{past[0].data.title}</a>.</>}
+        </p>
+      )}
+  </section>
+</Base>
+
+<style>
+  .intro h1 { font-size: clamp(2rem, 6vw, 3.6rem); max-width: 16ch; margin-top: .3rem; }
+</style>

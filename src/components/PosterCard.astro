@@ -1,0 +1,30 @@
+---
+import { Image } from 'astro:assets';
+import type { Event } from '../lib/data';
+import { formatDate } from '../lib/data';
+interface Props { event: Event }
+const { event } = Astro.props;
+const { title, date, venue, city, poster } = event.data;
+---
+<figure class="poster">
+  {poster ? (
+    <a href={poster.src} target="_blank" rel="noopener">
+      <Image src={poster} alt={`Cartaz: ${title}, ${venue}`} width={500} />
+    </a>
+  ) : (
+    <div class="placeholder" aria-hidden="true">
+      <span class="t">{title}</span>
+      <span class="v">{venue}</span>
+    </div>
+  )}
+  <figcaption><strong>{title}</strong><br /><span class="muted small">{formatDate(date)} · {venue}, {city}</span></figcaption>
+</figure>
+
+<style>
+  .poster { margin: 0; }
+  .poster img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; background: var(--line); }
+  .placeholder { aspect-ratio: 3 / 4; background: var(--ink); color: var(--paper); display: flex; flex-direction: column; justify-content: space-between; padding: 1rem; border-top: 6px solid var(--red); }
+  .placeholder .t { font-size: 1.5rem; font-weight: 700; line-height: 1.05; text-transform: uppercase; letter-spacing: -.01em; }
+  .placeholder .v { font-size: .85rem; text-transform: uppercase; letter-spacing: .06em; color: #c9c9c4; }
+  figcaption { margin-top: .5rem; font-size: .9rem; line-height: 1.35; }
+</style>
